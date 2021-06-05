@@ -43,7 +43,7 @@ public class DB_Connect {
 
 
 
-
+/*
             for(int i = 1; i < 201; i++) {
                 System.out.println("\n정책 " + i + "\n");
                 String insertSQL_PolicyInfo = "insert into PolicyInfo values(";
@@ -58,6 +58,8 @@ public class DB_Connect {
                 System.out.println("insert "+i);
                 System.out.println("\n------------------------------------------");
             }
+*/
+
 
             for(int i = 1; i < 201; i++) {
                 Random random = new Random();
