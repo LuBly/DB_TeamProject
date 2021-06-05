@@ -42,15 +42,15 @@ public class DB_Connect {
 
             for(int i = 1; i < 201; i++) {
                 System.out.println("\n정책 " + i + "\n");
-                String insertSQL = "insert into PolicyInfo values(";
+                String insertSQL_PolicyInfo = "insert into PolicyInfo values(";
                 for(int j = 0; j < 12; j++) {
-                    System.out.println(Data[i][j].length());
-                    insertSQL += "'"+ Data[i][j]+"',";
+                    System.out.println(Data[i][j].length());//input str의 길이를 check하기 위함.
+                    insertSQL_PolicyInfo += "'"+ Data[i][j]+"',";
                 }
-                insertSQL = insertSQL.replaceFirst(".$","");
-                insertSQL += ");";
-                System.out.println(insertSQL);
-                nowState.execute(insertSQL);
+                insertSQL_PolicyInfo = insertSQL_PolicyInfo.replaceFirst(".$","");//마지막 , 제거
+                insertSQL_PolicyInfo += ");";
+                System.out.println(insertSQL_PolicyInfo);
+                nowState.execute(insertSQL_PolicyInfo);
                 System.out.println("insert "+i);
                 System.out.println("\n------------------------------------------");
             }
