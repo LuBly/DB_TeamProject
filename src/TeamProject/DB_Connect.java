@@ -62,7 +62,7 @@ public class DB_Connect {
             for(int i = 1; i < 201; i++) {
                 Random random = new Random();
                 System.out.println("\n유저 " + i + "\n");
-                String insertSQL_UserInfo = "insert into UserInfo values('"+i+"','"+i+"','서울_차후 수정','"+(random.nextInt(60)+20)+"','"+Data[random.nextInt(200)][6]+"','"+Data[random.nextInt(200)][7]+"','"+Data[random.nextInt(200)][8]+"','"+Data[random.nextInt(200)][9]+");";
+                String insertSQL_UserInfo = "insert into UserInfo values('"+i+"','"+i+"','서울_차후 수정','"+(random.nextInt(60)+10)+"','"+Data[random.nextInt(200)][6]+"','"+Data[random.nextInt(200)][7]+"','"+Data[random.nextInt(200)][8]+"','"+Data[random.nextInt(200)][9]+");";
                 System.out.println(insertSQL_UserInfo);
                 //nowState.execute(insertSQL_UserInfo);
                 System.out.println("insert "+i);
