@@ -73,9 +73,14 @@ public class DB_Connect {
                 else{
                     String Age_num = Data[i][5].replaceAll("[^\\d]","");//나이 영역에서 숫자만 추출 경우1. 만 19세 ~ 34세, 경우2 만18세 이상
                     System.out.println(Age_num);
-                    if(Age_num.length()>2){//경우1 1934
+                    if(Age_num.length()>3){//경우1 1934
                         String minAge = Age_num.substring(0,2);
                         String maxAge = Age_num.substring(2);
+                        insertSQL_PolicyInfo += "'"+minAge+"','"+maxAge+"',";
+                    }
+                    else if(Age_num.length()==3){
+                        String minAge = Age_num.substring(0,1);
+                        String maxAge = Age_num.substring(1);
                         insertSQL_PolicyInfo += "'"+minAge+"','"+maxAge+"',";
                     }
                     else{
