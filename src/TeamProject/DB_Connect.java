@@ -14,15 +14,17 @@ public class DB_Connect {
         String username = "lumenize";
         String password = "audi8621";
         String[] area = {"서울","부산","대구","인천","대전","광주","울산","강원","경기","충청남도","충청북도","전라북도","전라남도","경상북도","경상남도","제주도"};
+        String[] accrRqisCn = {"고등학생","고졸","대학생","대학생(휴학)","대학 졸업"};
+        String[] majrRqisCn = {"기계공학과","산업공학과","화학공학과","신소재공학과","응용화학생명공학과","환경안전공학과","건설시스템공학과","교통시스템공학과","건축학과","융합시스템공학과"
+                                ,"전자공학과","소프트웨어학과","사이버보안학과","미디어학과","국방디지털융합학과","인공지능융합학과"
+                                ,"수학과","물리학과","화학과","생명과학과"
+                                ,"경영학과","e-비지니스학과","금융공학과","글로벌경영학과"
+                                ,"국어국문학과","사학과","영어영문학과","문화콘텐츠학과","불어불문학과"
+                                ,"경제학과","사회학과","행정학과","심리학과","정치외교학과","스포츠레저학과"
+                                ,"의학과","간호학과","약학과"};
 
         String[] empmSttsCn = new String[200];
         int empm_count = 0;
-
-        String[] accrRqisCn = new String[200];
-        int accr_count = 0;
-
-        String[] majrRqisCn = new String[200];
-        int majr_count = 0;
 
         String[] splzRlmRqisCn = new String[200];
         int splz_count = 0;
@@ -44,7 +46,7 @@ public class DB_Connect {
             //bizId : 정책 번호 ,polyBizSjnm : 정책명, polyItcnCn : 정책소개, plcyTpNm : 정책유형, rqutPrdCn : 신청기간 , rqutUrla : 사이트 주소, polyBizTy : 기관 및 지자채 구분, AgeInfo : 연령, empmSttsCn : 취업상태, accrRqisCn : 학력,  majrRqisCn : 전공, splzRlmRqisCn : 특화분야
             //bizId : 정책 번호, cnt : 검색횟수
 
-            String CreateUserInfo = "Create Table UserInfo(userID int,userPassword int, area varchar(20), ageInfo int, empmSttsCn varchar(20),accrRqisCn varchar(20), majrRqisCn varchar(20), splzRlmRqisCn varchar(20));";
+            String CreateUserInfo = "Create Table UserInfo(userID int,userPassword int, area varchar(20), ageInfo int, empmSttsCn varchar(20),accrRqisCn varchar(20), majrRqisCn varchar(20), splzRlmRqisCn varchar(100));";
             String CreatePolicyInfo = "Create Table PolicyInfo(bizId varchar(100),polyBizTy varchar(100),polyBizSjnm varchar(100),polyItcnCn varchar(200),plcyTpNm varchar(100),ageInfo varchar(100),empmSttsCn varchar(100),accrRqisCn varchar(100),majrRqisCn varchar(100), splzRlmRqisCn varchar(100), rqutPrdCn varchar(300), rqutUrla varchar(200));";
             String CreateCountInfo = "Create Table CountInfo(bizld varchar(20),cnt int);";
 
@@ -73,14 +75,7 @@ public class DB_Connect {
                     empmSttsCn[empm_count]=Data[i][6];
                     empm_count ++;
                 }
-                if(Data[i][7].compareTo("제한없음")!=0){
-                    accrRqisCn[accr_count]=Data[i][7];
-                    accr_count ++;
-                }
-                if(Data[i][8].compareTo("제한없음")!=0){
-                    majrRqisCn[majr_count]=Data[i][8];
-                    majr_count ++;
-                }
+
                 if(Data[i][9].compareTo("제한없음")!=0){
                     splzRlmRqisCn[splz_count]=Data[i][9];
                     splz_count ++;
@@ -89,24 +84,28 @@ public class DB_Connect {
                 System.out.println("insert "+i);
                 System.out.println("\n------------------------------------------");
             }
-
+/*
             for(int i = 1; i < 201; i++) {
                 Random random = new Random();
                 System.out.println("\n유저 " + i + "\n");
+                int empm_cur=random.nextInt(empm_count);
+                if(empmSttsCn[empm_cur].length()>20){
+                    empmSttsCn[empm_cur] = "자영업자";
+                }
 
                 String insertSQL_UserInfo = "insert into UserInfo values('"+i+"','"+i+"','"
                         +area[random.nextInt(area.length)]//지역
-                        +"','"+(random.nextInt(60)+10)+"','"//나이 10~70
-                        +empmSttsCn[random.nextInt(empm_count)]+"','"//취업상태
-                        +accrRqisCn[random.nextInt(accr_count)]+"','"//학력
-                        +majrRqisCn[random.nextInt(1)]+"','"//전공_직접입력_>>생략 건의<<
+                        +"','"+(random.nextInt(60)+20)+"','"//나이 10~70
+                        +empmSttsCn[empm_cur]+"','"//취업상태
+                        +accrRqisCn[random.nextInt(accrRqisCn.length)]+"','"//학력
+                        +majrRqisCn[random.nextInt(majrRqisCn.length)]+"','"//전공
                         +splzRlmRqisCn[random.nextInt(splz_count)]+"');";//특화분야
                 System.out.println(insertSQL_UserInfo);
-                //nowState.execute(insertSQL_UserInfo);
+                nowState.execute(insertSQL_UserInfo);
                 System.out.println("insert "+i);
                 System.out.println("\n------------------------------------------");
             }
-
+*/
 
         } catch(SQLException e) {
 
