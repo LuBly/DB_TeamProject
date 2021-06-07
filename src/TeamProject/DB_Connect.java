@@ -14,6 +14,18 @@ public class DB_Connect {
         String username = "lumenize";
         String password = "audi8621";
         String[] area = {"서울","부산","대구","인천","대전","광주","울산","강원","경기","충청남도","충청북도","전라북도","전라남도","경상북도","경상남도","제주도"};
+
+        String[] empmSttsCn = new String[200];
+        int empm_count = 0;
+
+        String[] accrRqisCn = new String[200];
+        int accr_count = 0;
+
+        String[] majrRqisCn = new String[200];
+        int majr_count = 0;
+
+        String[] splzRlmRqisCn = new String[200];
+        int splz_count = 0;
         try {
             Scanner scan = new Scanner(System.in);
 
@@ -56,24 +68,39 @@ public class DB_Connect {
                 insertSQL_PolicyInfo += ");";
                 System.out.println(insertSQL_PolicyInfo);
                 nowState.execute(insertSQL_PolicyInfo);
+
+                if(Data[i][6].compareTo("제한없음")!=0){
+                    empmSttsCn[empm_count]=Data[i][6];
+                    empm_count ++;
+                }
+                if(Data[i][7].compareTo("제한없음")!=0){
+                    accrRqisCn[accr_count]=Data[i][7];
+                    accr_count ++;
+                }
+                if(Data[i][8].compareTo("제한없음")!=0){
+                    majrRqisCn[majr_count]=Data[i][8];
+                    majr_count ++;
+                }
+                if(Data[i][9].compareTo("제한없음")!=0){
+                    splzRlmRqisCn[splz_count]=Data[i][9];
+                    splz_count ++;
+                }
+
                 System.out.println("insert "+i);
                 System.out.println("\n------------------------------------------");
             }
 
-            String a = "";
-            String b = "";
-
             for(int i = 1; i < 201; i++) {
                 Random random = new Random();
                 System.out.println("\n유저 " + i + "\n");
-/*
-                a = Data[random.nextInt(200)][0];
-                while( a.compareTo("제한없음") == 0){
-                    a = Data[random.nextInt(200)][0];
-                }
-                while()
-*/
-                String insertSQL_UserInfo = "insert into UserInfo values('"+i+"','"+i+"','"+area[random.nextInt(area.length)]+"','"+(random.nextInt(60)+10)+"','"+Data[random.nextInt(200)][6]+"','"+Data[random.nextInt(200)][7]+"','"+Data[random.nextInt(200)][8]+"','"+Data[random.nextInt(200)][9]+");";
+
+                String insertSQL_UserInfo = "insert into UserInfo values('"+i+"','"+i+"','"
+                        +area[random.nextInt(area.length)]//지역
+                        +"','"+(random.nextInt(60)+10)+"','"//나이 10~70
+                        +empmSttsCn[random.nextInt(empm_count)]+"','"//취업상태
+                        +accrRqisCn[random.nextInt(accr_count)]+"','"//학력
+                        +majrRqisCn[random.nextInt(1)]+"','"//전공_직접입력_>>생략 건의<<
+                        +splzRlmRqisCn[random.nextInt(splz_count)]+"');";//특화분야
                 System.out.println(insertSQL_UserInfo);
                 //nowState.execute(insertSQL_UserInfo);
                 System.out.println("insert "+i);
