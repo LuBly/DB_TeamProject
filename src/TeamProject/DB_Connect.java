@@ -47,7 +47,7 @@ public class DB_Connect {
             //bizId : 정책 번호, cnt : 검색횟수
 
             String CreateUserInfo = "Create Table UserInfo(userID int,userPassword int, area varchar(20), ageInfo int, empmSttsCn varchar(20),accrRqisCn varchar(20), majrRqisCn varchar(20), splzRlmRqisCn varchar(100));";
-            String CreatePolicyInfo = "Create Table PolicyInfo(bizId varchar(100),polyBizTy varchar(100),polyBizSjnm varchar(100),polyItcnCn varchar(200),plcyTpNm varchar(100),ageInfo varchar(100),empmSttsCn varchar(100),accrRqisCn varchar(100),majrRqisCn varchar(100), splzRlmRqisCn varchar(100), rqutPrdCn varchar(300), rqutUrla varchar(200));";
+            String CreatePolicyInfo = "Create Table PolicyInfo(bizId varchar(100),polyBizTy varchar(100),polyBizSjnm varchar(100),polyItcnCn varchar(200),plcyTpNm varchar(100),ageInfo varchar(100), minAge int, maxAge int, empmSttsCn varchar(100),accrRqisCn varchar(100),majrRqisCn varchar(100), splzRlmRqisCn varchar(100), rqutPrdCn varchar(300), rqutUrla varchar(200));";
             String CreateCountInfo = "Create Table CountInfo(bizld varchar(20),cnt int);";
 
             nowState.execute(CreateUserInfo);
@@ -62,22 +62,43 @@ public class DB_Connect {
             for(int i = 1; i < 201; i++) {
                 System.out.println("\n정책 " + i + "\n");
                 String insertSQL_PolicyInfo = "insert into PolicyInfo values(";
-                for(int j = 0; j < 12; j++) {
-                    System.out.println(Data[i][j].length());//input str의 길이를 check하기 위함.
+
+                for(int j = 0; j < 6; j++) {
                     insertSQL_PolicyInfo += "'"+ Data[i][j]+"',";
                 }
+
+                if(Data[i][5].compareTo("제한없음")==0){//제한없음일 때 min=0, max=99
+                    insertSQL_PolicyInfo += "'0','99',";
+                }
+                else{
+                    String Age_num = Data[i][5].replaceAll("[^\\d]","");//나이 영역에서 숫자만 추출 경우1. 만 19세 ~ 34세, 경우2 만18세 이상
+                    System.out.println(Age_num);
+                    if(Age_num.length()>2){//경우1 1934
+                        String minAge = Age_num.substring(0,2);
+                        String maxAge = Age_num.substring(2);
+                        insertSQL_PolicyInfo += "'"+minAge+"','"+maxAge+"',";
+                    }
+                    else{
+                        insertSQL_PolicyInfo += "'"+Age_num+"','99',";
+                    }
+                }
+
+                for(int j = 8; j < 14; j++) {
+                    insertSQL_PolicyInfo += "'"+ Data[i][j-2]+"',";
+                }
+
                 insertSQL_PolicyInfo = insertSQL_PolicyInfo.replaceFirst(".$","");//마지막 , 제거
                 insertSQL_PolicyInfo += ");";
                 System.out.println(insertSQL_PolicyInfo);
                 nowState.execute(insertSQL_PolicyInfo);
 
-                if(Data[i][6].compareTo("제한없음")!=0){
-                    empmSttsCn[empm_count]=Data[i][6];
+                if(Data[i][8].compareTo("제한없음")!=0){
+                    empmSttsCn[empm_count]=Data[i][8];
                     empm_count ++;
                 }
 
-                if(Data[i][9].compareTo("제한없음")!=0){
-                    splzRlmRqisCn[splz_count]=Data[i][9];
+                if(Data[i][11].compareTo("제한없음")!=0){
+                    splzRlmRqisCn[splz_count]=Data[i][11];
                     splz_count ++;
                 }
 
