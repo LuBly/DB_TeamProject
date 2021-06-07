@@ -62,7 +62,7 @@ public class DB_Connect {
             for(int i = 1; i < 201; i++) {
                 System.out.println("\n정책 " + i + "\n");
                 String insertSQL_PolicyInfo = "insert into PolicyInfo values(";
-
+                String insertSQL_CountInfo = "insert into CountInfo values(";
                 for(int j = 0; j < 6; j++) {
                     insertSQL_PolicyInfo += "'"+ Data[i][j]+"',";
                 }
@@ -94,8 +94,13 @@ public class DB_Connect {
 
                 insertSQL_PolicyInfo = insertSQL_PolicyInfo.replaceFirst(".$","");//마지막 , 제거
                 insertSQL_PolicyInfo += ");";
+                insertSQL_CountInfo += "'"+Data[i][0]+"',0);";
+
                 System.out.println(insertSQL_PolicyInfo);
+                System.out.println(insertSQL_CountInfo);
+
                 nowState.execute(insertSQL_PolicyInfo);
+                nowState.execute(insertSQL_CountInfo);
 
                 if(Data[i][8].compareTo("제한없음")!=0){
                     empmSttsCn[empm_count]=Data[i][8];
