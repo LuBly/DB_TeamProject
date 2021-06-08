@@ -1,17 +1,11 @@
-
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
-import java.util.Scanner;
-import java.sql.ResultSet;
+import java.sql.*;
+import java.util.*;
 
 public class ConnectDB {
 	
 	public static User login(String userID, String userPassword, Statement curState) {
 		try {
-			String query = "Select * from UserInfo while userID =" + userID + "and userPassword = " + userPassword + ";";
+			String query = "select * from Userinfo where userId = " + userID + " and userPassword = " + userPassword + ";";
 			ResultSet result = curState.executeQuery(query);
 			User user = new User();
 			int cnt = 0;
@@ -26,6 +20,7 @@ public class ConnectDB {
 				user.splzRlmRqisCn = result.getString("splzRlmRqisCn");
 				cnt++;
 			}
+			System.out.println(cnt);
 			if(cnt == 1)
 				return user;
 		}
@@ -53,9 +48,10 @@ public class ConnectDB {
 
 	    String[] empmSttsCn = new String[200];
         int empm_count = 0;
-
+        
         String[] splzRlmRqisCn = new String[200];
         int splz_count = 0;
+        
 		try {
 			Scanner scan = new Scanner(System.in);
 			
@@ -77,7 +73,7 @@ public class ConnectDB {
 			
 			String CreateUserInfo = "Create Table UserInfo(userID int,userPassword int, area varchar(20), ageInfo int, empmSttsCn varchar(20),accrRqisCn varchar(20), majrRqisCn varchar(20), splzRlmRqisCn varchar(100));";
             String CreatePolicyInfo = "Create Table PolicyInfo(bizId varchar(100),polyBizTy varchar(100),polyBizSjnm varchar(100),polyItcnCn varchar(200),plcyTpNm varchar(100),ageInfo varchar(100), minAge int, maxAge int, empmSttsCn varchar(100),accrRqisCn varchar(100),majrRqisCn varchar(100), splzRlmRqisCn varchar(100), rqutPrdCn varchar(300), rqutUrla varchar(200));";
-            String CreateCountInfo = "Create Table CountInfo(bizld varchar(20),cnt int);";
+            String CreateCountInfo = "Create Table CountInfo(bizId varchar(20),cnt int);";
 
 
 			curState.executeUpdate(dropTable);
@@ -116,6 +112,7 @@ public class ConnectDB {
                         insertSQL_PolicyInfo += "'"+Age_num+"','99',";
                     }
                 }
+                
                 for(int j = 8; j < 14; j++) {
                     insertSQL_PolicyInfo += "'"+ Data[i][j-2]+"',";
                 }
@@ -129,20 +126,45 @@ public class ConnectDB {
 
                 curState.execute(insertSQL_PolicyInfo);
                 curState.execute(insertSQL_CountInfo);
-
-                if(Data[i][8].compareTo("제한없음")!=0){
-                    empmSttsCn[empm_count]=Data[i][8];
+                if(Data[i][6].compareTo("제한없음") != 0){
+                    empmSttsCn[empm_count] = Data[i][8];
                     empm_count ++;
                 }
 
-                if(Data[i][11].compareTo("제한없음")!=0){
-                    splzRlmRqisCn[splz_count]=Data[i][11];
+                if(Data[i][9].compareTo("제한없음") != 0){
+                    splzRlmRqisCn[splz_count]=Data[i][9];
                     splz_count ++;
                 }
-
+                
                 System.out.println("insert "+i);
                 System.out.println("\n------------------------------------------");
             }
+
+            System.out.println(empm_count);
+            
+			for(int i = 1; i < 201; i++) {
+				Random random = new Random();
+	            System.out.println("\n유저 " + i + "\n");
+	            
+	            int empm_cur=random.nextInt(empm_count);
+	            
+	            if(empmSttsCn[empm_cur].length() > 20){
+	                empmSttsCn[empm_cur] = "자영업자";
+	            }
+	            
+	            String insertSQL_UserInfo = "insert into UserInfo values('"+i+"','"+i+"','"
+	            +area[random.nextInt(area.length)]//지역
+	            +"','"+(random.nextInt(60)+20)+"','"//나이 10~70
+	            +empmSttsCn[empm_cur]+"','"//취업상태
+	            +accrRqisCn[random.nextInt(accrRqisCn.length)]+"','"//학력
+	            +majrRqisCn[random.nextInt(majrRqisCn.length)]+"','"//전공
+	            +splzRlmRqisCn[random.nextInt(splz_count)]+"');";//특화분야
+	            
+	            System.out.println(insertSQL_UserInfo);
+	            curState.execute(insertSQL_UserInfo);
+	            System.out.println("insert "+i);
+	            System.out.println("\n------------------------------------------");
+	        }
     	    
 			
 			String userId;
@@ -166,13 +188,15 @@ public class ConnectDB {
 				choice = scan.nextInt();
 				ResultSet result;
 				if(choice == 1) {
-					query = "select * from policyInfo where (userInfo.polyBizTy == policyInfo.polyBizTy or userInfo.polyBizTy == \"제한없음\") " 
-					+ "and (userInfo.ageInfo < policyInfo.maxAge) "
-					+ "and (userInfo.ageInfo > policyInfo.minAge) "
-					+ "and (userInfo.empmSttsCn == policyInfo.empmSttsCn or userInfo.empmSttsCn == \"제한없음\") "
-					+ "and (userInfo.accrRqisCn == policyInfo.accrRqisCn or userInfo.accrRqisCn == \\\"제한없음\") "
-					+ "and (userInfo.majrRqisCn == policyInfo.majrRqisCn or userInfo.majrRqisCn == \"제한없음\") "
-					+ "and (userInfo.splzRlmRqisCn == policyInfo.splzRlmRqisCn or userInfo.splzRlmRqisCn == \"제한없음\");" ;
+					System.out.println("나에게 맞는 정책을 찾습니다");
+					query = "select distinct policyInfo.* from policyInfo, userInfo where " 
+					+ "(" + user.ageInfo + " < policyInfo.maxAge) "
+					+ "and (" + user.ageInfo + " > policyInfo.minAge) "
+					+ "and ( \'" + user.empmSttsCn + "\' = policyInfo.empmSttsCn or policyInfo.empmSttsCn = \'제한없음\') "
+					+ "and ( \'" + user.accrRqisCn + "\' = policyInfo.accrRqisCn or policyInfo.accrRqisCn = \'제한없음\') "
+					+ "and ( \'" + user.majrRqisCn + "\' = policyInfo.majrRqisCn or policyInfo.majrRqisCn = \'제한없음\') "
+					+ "and ( \'" + user.splzRlmRqisCn + "\' = policyInfo.splzRlmRqisCn or policyInfo.splzRlmRqisCn = \'제한없음\');" ;
+
 					result = curState.executeQuery(query);
 					ArrayList<Policy> list = new ArrayList<> ();
 					int check = 0;
@@ -180,13 +204,13 @@ public class ConnectDB {
 						Policy policy = new Policy();
 						policy.bizId = result.getString("bizId");
 						policy.polyBizSjnm = result.getString("polyBizSjnm");
-						policy.polyItnCn = result.getString("polyItnCn");
+						policy.polyItcnCn = result.getString("polyItcnCn");
 						policy.plcyTpNm = result.getString("plcyTpNm");
 						policy.rqutPrdCn = result.getString("rqutPrdCn");
 						policy.rqutUrla = result.getString("rqutUrla");
 						policy.polyBizTy = result.getString("polyBizTy");
-						policy.minAge = result.getInt("min_Age");
-						policy.maxAge = result.getInt("max_Age");
+						policy.minAge = result.getInt("minAge");
+						policy.maxAge = result.getInt("maxAge");
 						policy.empmSttsCn = result.getString("empmSttsCn");
 						policy.accrRqisCn = result.getString("accrRqisCn");
 						policy.majrRqisCn = result.getString("majrRqisCn");
@@ -194,12 +218,16 @@ public class ConnectDB {
 						list.add(policy);
 						check = 1;
 					}
+					if(check == 0) {
+						System.out.println("검색 결과가 존재하지 않습니다!");
+						continue;
+					}
 					System.out.println("search result");
 					System.out.println("-------------------------------");
 					while(true) {
 						int cnt = 1;
 						for(Policy idx : list) {
-							System.out.printf("|%3d|%100s|\n", cnt, idx.polyBizSjnm);
+							System.out.printf("|%3d|%s\n", cnt, idx.polyBizSjnm);
 							cnt++;
 						}
 						System.out.print("자세히 볼 정책번호를 고르시오(이전 화면 -> 0번):");
@@ -209,11 +237,14 @@ public class ConnectDB {
 						int curIdx = 1;
 						for(Policy idx : list) {
 							if(curIdx == policyChoice) {
-								System.out.println("기관 및 지자체: " + idx.polyBizTy);
+								System.out.println("\n기관 및 지자체: " + idx.polyBizTy);
 								System.out.println("정책명: " + idx.polyBizSjnm);
-								System.out.println("정책소개: " + idx.polyItnCn);
+								System.out.println("정책소개: " + idx.polyItcnCn);
 								System.out.println("정책유형: " + idx.plcyTpNm);
-								System.out.println("참여요건 - 연령: " + idx.minAge + "~" + idx.maxAge);
+								if(idx.minAge != 0)
+									System.out.println("참여요건 - 연령: " + idx.minAge + "~" + idx.maxAge);
+								else
+									System.out.println("참여요건 - 연령: 제한없음");
 								System.out.println("참여요건 - 취업상태: " + idx.empmSttsCn);
 								System.out.println("참여요건 - 학력: " + idx.accrRqisCn);
 								System.out.println("참여요건 - 전공: " + idx.majrRqisCn);
@@ -224,11 +255,19 @@ public class ConnectDB {
 							}
 							curIdx++;
 						}
+						int back = 0;
+						while (back != 1) {
+							System.out.print("이전 화면으로 돌아가려면 1을 입력해주세요: ");
+							back = scan.nextInt();
+							System.out.println();
+						}
 					}
 				}
 				else if(choice == 2) {
-					String keyword = scan.nextLine();
-					query = "select * from policyInfo where polyBizSjnm = " + "%" + keyword + "%;";
+					System.out.print("검색어를 입력해 주세요:");
+					String keyword = scan.next();
+					query = "select distinct * from policyInfo where polyBizSjnm like \'" + "%" + keyword + "%\';";
+					System.out.println(query);
 					result = curState.executeQuery(query);
 					ArrayList<Policy> list = new ArrayList<> ();
 					int check = 0;
@@ -236,13 +275,13 @@ public class ConnectDB {
 						Policy policy = new Policy();
 						policy.bizId = result.getString("bizId");
 						policy.polyBizSjnm = result.getString("polyBizSjnm");
-						policy.polyItnCn = result.getString("polyItnCn");
+						policy.polyItcnCn = result.getString("polyItcnCn");
 						policy.plcyTpNm = result.getString("plcyTpNm");
 						policy.rqutPrdCn = result.getString("rqutPrdCn");
 						policy.rqutUrla = result.getString("rqutUrla");
 						policy.polyBizTy = result.getString("polyBizTy");
-						policy.minAge = result.getInt("min_Age");
-						policy.maxAge = result.getInt("max_Age");
+						policy.minAge = result.getInt("minAge");
+						policy.maxAge = result.getInt("maxAge");
 						policy.empmSttsCn = result.getString("empmSttsCn");
 						policy.accrRqisCn = result.getString("accrRqisCn");
 						policy.majrRqisCn = result.getString("majrRqisCn");
@@ -259,7 +298,7 @@ public class ConnectDB {
 					while(true) {
 						int cnt = 1;
 						for(Policy idx : list) {
-							System.out.printf("|%3d|%100s|\n", cnt, idx.polyBizSjnm);
+							System.out.printf("|%3d|%s|\n", cnt, idx.polyBizSjnm);
 							cnt++;
 						}
 						System.out.print("자세히 볼 정책번호를 고르시오(이전 화면 -> 0번):");
@@ -271,9 +310,12 @@ public class ConnectDB {
 							if(curIdx == policyChoice) {
 								System.out.println("기관 및 지자체: " + idx.polyBizTy);
 								System.out.println("정책명: " + idx.polyBizSjnm);
-								System.out.println("정책소개: " + idx.polyItnCn);
+								System.out.println("정책소개: " + idx.polyItcnCn);
 								System.out.println("정책유형: " + idx.plcyTpNm);
-								System.out.println("참여요건 - 연령: " + idx.minAge + "~" + idx.maxAge);
+								if(idx.minAge != 0)
+									System.out.println("참여요건 - 연령: " + idx.minAge + "~" + idx.maxAge);
+								else
+									System.out.println("참여요건 - 연령: 제한없음");
 								System.out.println("참여요건 - 취업상태: " + idx.empmSttsCn);
 								System.out.println("참여요건 - 학력: " + idx.accrRqisCn);
 								System.out.println("참여요건 - 전공: " + idx.majrRqisCn);
@@ -285,8 +327,8 @@ public class ConnectDB {
 							curIdx++;
 						}
 					}
-					query = "update countInfo set count = count + 1 where bizId in (select bizId from policyInfo where polyBizSjnm = " + "%" + keyword + "%);";
-					result = curState.executeQuery(query);
+					query = "update countInfo set cnt = cnt + 1 where countinfo.bizId in (select bizId from policyInfo where polyBizSjnm like " + "\'%" + keyword + "%\');";
+					curState.execute(query);
 				}
 				else if(choice == 3) {
 					query = "Select polyBizSjnm From poliyInfo Where poliyInfo.bizID = \r\n"
@@ -311,7 +353,7 @@ public class ConnectDB {
 				}
 			}
 		} catch(SQLException e) {
-			
+			System.out.println(e);
 		}
 	}
 }

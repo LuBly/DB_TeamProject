@@ -2,7 +2,7 @@
 public class Policy {
 	String bizId;
 	String polyBizSjnm;
-	String polyItnCn;
+	String polyItcnCn;
 	String plcyTpNm;
 	String rqutPrdCn;
 	String rqutUrla;
