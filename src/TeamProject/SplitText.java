@@ -2587,49 +2587,6 @@ public class SplitText {
 				+ "      <jdgnPresCn><![CDATA[-]]></jdgnPresCn>\r\n"
 				+ "      <rqutUrla><![CDATA[https://library.geochang.go.kr/]]></rqutUrla>\r\n"
 				+ "   </emp>"
-				+ "   <emp>\r\n"
-				+ "      <rownum>101</rownum>\r\n"
-				+ "      <bizId>R2021021803940</bizId>\r\n"
-				+ "      <polyBizSecd>003002015019</polyBizSecd>\r\n"
-				+ "      <polyBizTy><![CDATA[지자체]]></polyBizTy>\r\n"
-				+ "      <polyBizSjnm><![CDATA[농촌총각 국제결혼 지원]]></polyBizSjnm>\r\n"
-				+ "      <polyItcnCn><![CDATA[농촌총각의 원만한 가정형성과 영농의욕 고취로 젊은 농업 인력의 이농 방지 및 정착 유도]]></polyItcnCn>\r\n"
-				+ "      <plcyTpNm><![CDATA[생활·복지]]></plcyTpNm>\r\n"
-				+ "      <sporScvl><![CDATA[3명]]></sporScvl>\r\n"
-				+ "      <sporCn><![CDATA[국제결혼 소요비용 일부 지원]]></sporCn>\r\n"
-				+ "      <ageInfo><![CDATA[만 33세 이상]]></ageInfo>\r\n"
-				+ "      <empmSttsCn><![CDATA[제한없음]]></empmSttsCn>\r\n"
-				+ "      <accrRqisCn><![CDATA[제한없음]]></accrRqisCn>\r\n"
-				+ "      <majrRqisCn><![CDATA[제한없음]]></majrRqisCn>\r\n"
-				+ "      <splzRlmRqisCn><![CDATA[제한없음]]></splzRlmRqisCn>\r\n"
-				+ "      <cnsgNmor><![CDATA[해당없음]]></cnsgNmor>\r\n"
-				+ "      <rqutPrdCn><![CDATA[2021.01.01 ~ 2021.12.31.]]></rqutPrdCn>\r\n"
-				+ "      <rqutProcCn><![CDATA[읍면사무소에 신청]]></rqutProcCn>\r\n"
-				+ "      <jdgnPresCn><![CDATA[신청서 검토 후 결혼사실 확인(가족관계증명서) 및 신부 입국 완료(외국인 등록)일로부터 최소 2개월 경과 후 현지 실태조사를 거쳐 정상적 결혼생활 유지 시 보조금 지급 ]]></jdgnPresCn>\r\n"
-				+ "      <rqutUrla><![CDATA[방문접수]]></rqutUrla>\r\n"
-				+ "   </emp>\r\n"
-				+ "   <emp>\r\n"
-				+ "      <rownum>102</rownum>\r\n"
-				+ "      <bizId>R2021021803939</bizId>\r\n"
-				+ "      <polyBizSecd>003002015019</polyBizSecd>\r\n"
-				+ "      <polyBizTy><![CDATA[지자체]]></polyBizTy>\r\n"
-				+ "      <polyBizSjnm><![CDATA[맘(MOM)편한 도서배달 서비스]]></polyBizSjnm>\r\n"
-				+ "      <polyItcnCn><![CDATA[도서관 이용이 어려운 임산부와 영유아양육자를 위한 도서배달서비스]]></polyItcnCn>\r\n"
-				+ "      <plcyTpNm><![CDATA[생활·복지]]></plcyTpNm>\r\n"
-				+ "      <sporScvl><![CDATA[null]]></sporScvl>\r\n"
-				+ "      <sporCn><![CDATA[도서배달]]></sporCn>\r\n"
-				+ "      <ageInfo><![CDATA[제한없음]]></ageInfo>\r\n"
-				+ "      <empmSttsCn><![CDATA[제한없음]]></empmSttsCn>\r\n"
-				+ "      <accrRqisCn><![CDATA[제한없음]]></accrRqisCn>\r\n"
-				+ "      <majrRqisCn><![CDATA[제한없음]]></majrRqisCn>\r\n"
-				+ "      <splzRlmRqisCn><![CDATA[제한없음]]></splzRlmRqisCn>\r\n"
-				+ "      <cnsgNmor><![CDATA[해당없음]]></cnsgNmor>\r\n"
-				+ "      <rqutPrdCn><![CDATA[상시]]></rqutPrdCn>\r\n"
-				+ "      <rqutProcCn><![CDATA[null]]></rqutProcCn>\r\n"
-				+ "      <jdgnPresCn><![CDATA[-]]></jdgnPresCn>\r\n"
-				+ "      <rqutUrla><![CDATA[https://library.geochang.go.kr/]]></rqutUrla>\r\n"
-				+ "   </emp>\r\n"
-				+ "   <emp>\r\n"
 				+ "      <rownum>103</rownum>\r\n"
 				+ "      <bizId>R2021021803938</bizId>\r\n"
 				+ "      <polyBizSecd>003002015019</polyBizSecd>\r\n"
@@ -4777,14 +4734,16 @@ public class SplitText {
 				+ "      <rqutUrla><![CDATA[http://www.sacheon.go.kr]]></rqutUrla>\r\n"
 				+ "   </emp>";
 
-		String[][] Data = new String[201][12] ;
+		String[][] Data = new String[199][12] ;
 		
 		String[] emp = Text.split("<emp>");
 		for(int i = 1; i < emp.length; i++) {
 			splitText(emp[i],Data[i]);
 		}
 		
-//		for(int i = 1; i < 201; i++) {
+		
+//		for(int i = 1; i < 199; i++) {
+//			System.out.println(i);
 //			for(int j = 0; j < 12; j++) {
 //				System.out.println(Data[i][j]);
 //			}

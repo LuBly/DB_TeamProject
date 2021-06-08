@@ -1,4 +1,3 @@
-
 public class Policy {
 	String bizId;
 	String polyBizSjnm;
